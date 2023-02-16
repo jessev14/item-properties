@@ -1,0 +1,13 @@
+#item-properties button.add {
+    margin: 10px 0;
+}
+
+#item-properties div.property {
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+#item-properties div.property a.delete {
+    flex: 0;
+    margin: 0px 4px 0px 8px;
+}

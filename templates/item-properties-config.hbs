@@ -1,0 +1,12 @@
+<form autocomplete="off">
+
+    {{#each properties as |property id|}}
+    <div class="flexrow property">
+        <input type="text" name="{{id}}" value="{{property}}" />
+        <a class="delete"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {{/each}}
+
+    <button class="add" type="button"><i class="fa-solid fa-plus"></i>Add Property</button>
+    <button class="save" type="submit"><i class="fas fa-save"></i>Save</button>
+</form>
