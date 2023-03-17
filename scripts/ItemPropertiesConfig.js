@@ -19,8 +19,15 @@ export class ItemPropertiesConfig extends FormApplication {
 
     getData() {
         const data = super.getData();
-        data.properties = game.settings.get(moduleID, 'itemProperties');
-        
+        const properties = game.settings.get(moduleID, 'itemProperties');
+        const propertiesArray = Object.entries(properties).sort((a, b) => {
+            return a[1] < b[1] ? -1 : 1;
+        });
+        data.properties = {};
+        for (const [k, v] of propertiesArray) {
+            data.properties[k] = v;
+        }
+
         return data;
     }
 

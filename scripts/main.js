@@ -28,7 +28,14 @@ Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
 
     const item = app.object;
     const flagData = item.getFlag(moduleID, 'itemProperties');
-    const itemProperties = game.settings.get(moduleID, 'itemProperties');
+    const itemProps = game.settings.get(moduleID, 'itemProperties');
+    const itemPropsArray = Object.entries(itemProps).sort((a, b) => {
+        return a[1] < b[1] ? -1 : 1;
+    });
+    const itemProperties = {};
+    for (const [k, v] of itemPropsArray) {
+        itemProperties[k] = v;
+    }
 
     const itemPropertiesDiv = document.createElement('div');
     itemPropertiesDiv.classList.add('form-group', 'stacked', 'weapon-properties');
