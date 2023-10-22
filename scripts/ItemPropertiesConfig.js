@@ -12,7 +12,7 @@ export class ItemPropertiesConfig extends FormApplication {
             template: `modules/${moduleID}/templates/item-properties-config.hbs`,
             width: 300,
             height: 'auto',
-            submitOnChange: true,
+            submitOnChange: false,
             closeOnSubmit: false
         });
     }
@@ -21,11 +21,14 @@ export class ItemPropertiesConfig extends FormApplication {
         const data = super.getData();
         const properties = game.settings.get(moduleID, 'itemProperties');
         const propertiesArray = Object.entries(properties).sort((a, b) => {
-            return a[1] < b[1] ? -1 : 1;
+            return a[0][1] < b[0][1] ? -1 : 1;
         });
         data.properties = {};
         for (const [k, v] of propertiesArray) {
-            data.properties[k] = v;
+            data.properties[k] = {
+                name: v[0],
+                tooltip: v[1]
+            };
         }
 
         return data;
@@ -71,6 +74,15 @@ export class ItemPropertiesConfig extends FormApplication {
     }
 
     _updateObject(event, formData) {
-        return game.settings.set(moduleID, 'itemProperties', formData);
+        const settingsData = {};
+        const fd = Object.entries(formData);
+        for (let i = 0; i < fd.length; i += 2) {
+            settingsData[fd[i][0]] = {
+                name: fd[i][1],
+                tooltip: fd[i + 1][1]
+            }
+        }
+
+        return game.settings.set(moduleID, 'itemProperties', settingsData);
     }
 }

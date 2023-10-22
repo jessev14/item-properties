@@ -30,7 +30,7 @@ Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
     const flagData = item.getFlag(moduleID, 'itemProperties');
     const itemProps = game.settings.get(moduleID, 'itemProperties');
     const itemPropsArray = Object.entries(itemProps).sort((a, b) => {
-        return a[1] < b[1] ? -1 : 1;
+        return a[0][1] < b[0][1] ? -1 : 1;
     });
     const itemProperties = {};
     for (const [k, v] of itemPropsArray) {
@@ -42,9 +42,9 @@ Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
     itemPropertiesDiv.innerHTML = `<label>Item Properties</label>`;
     for (const [id, property] of Object.entries(itemProperties)) {
         itemPropertiesDiv.innerHTML += `
-            <label class="checkbox">
+            <label class="checkbox" data-tooltip=${property.tooltip}>
                 <input type="checkbox" name="flags.${moduleID}.itemProperties.${id}" ${flagData?.[id] ? 'checked' : ''}>
-                ${property}
+                ${property.name}
             </label>
         `;
     }

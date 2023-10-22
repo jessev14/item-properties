@@ -1,8 +1,12 @@
 <form autocomplete="off">
-
+    <div class="flexrow header">
+        <div>Item Property</div>
+        <div>Tooltip Text</div>
+    </div>
     {{#each properties as |property id|}}
     <div class="flexrow property">
-        <input type="text" name="{{id}}" value="{{property}}" />
+        <input type="text" name="{{id}}" value="{{property.name}}" />
+        <input type="text" name="{{id}}-tooltip" value="{{property.tooltip}}" />
         <a class="delete"><i class="fa-solid fa-trash"></i></a>
     </div>
     {{/each}}
