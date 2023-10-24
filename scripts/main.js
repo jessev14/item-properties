@@ -18,7 +18,31 @@ Hooks.once('init', () => {
         restricted: true
     });
 
+    game.settings.register(moduleID, 'migrationV1.2.0', {
+        scope: 'world',
+        type: Boolean,
+        default: false
+    });
+
     libWrapper.register(moduleID, 'CONFIG.Item.documentClass.prototype.getChatData', newGetChatData, 'WRAPPER');
+});
+
+Hooks.once('ready', async () => {
+    if (game.settings.get(moduleID, 'migrationV1.2.0')) return;
+
+    const itemProperties = game.settings.get(moduleID, 'itemProperties');
+    const migratedData = {};
+    if (Object.entries(itemProperties).length) {
+        for (const [k, v] of Object.entries(itemProperties)) {
+            migratedData[k] = {
+                name: v,
+                tooltip: ''
+            };
+        }   
+    } else return game.settings.set(moduleID, 'migrationV1.2.0', true);
+
+    await game.settings.set(moduleID, 'itemProperties', migratedData);
+    return game.settings.set(moduleID, 'migrationV1.2.0', true);
 });
 
 

@@ -26,8 +26,8 @@ export class ItemPropertiesConfig extends FormApplication {
         data.properties = {};
         for (const [k, v] of propertiesArray) {
             data.properties[k] = {
-                name: v[0],
-                tooltip: v[1]
+                name: v.name,
+                tooltip: v.tooltip
             };
         }
 
@@ -53,7 +53,7 @@ export class ItemPropertiesConfig extends FormApplication {
             const { target } = ev;
             if (!target.classList.contains('fa-trash')) return;
 
-            const key = target.closest('a').previousElementSibling.name;
+            const key = target.closest('div').querySelector('input').name;
             const itemProperties = game.settings.get(moduleID, 'itemProperties');
 
             const res = await Dialog.confirm({
