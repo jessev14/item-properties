@@ -47,7 +47,7 @@ Hooks.once('ready', async () => {
 
 
 Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
-    const detailsTab = html.querySelector('div.tab.details');
+    const detailsTab = html.querySelector('div.tab.details') || html.querySelector('div.tidy-tab.details');
     if (!detailsTab) return;
 
     const item = app.object;
