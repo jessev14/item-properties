@@ -78,12 +78,12 @@ Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
     const propertiesOl = Ols?.[1] || Ols?.[0];
     if (!propertiesOl || !flagData) return;
 
-    for (const [k,v ] of Object.entries(flagData)) {
+    for (const [k, v] of Object.entries(flagData)) {
         if (!v) continue;
         
         const customProperty = itemProperties[k];
         const propLi = document.createElement('li');
-        propLi.innerText = customProperty;
+        propLi.innerText = customProperty.name || customProperty;
         propertiesOl.appendChild(propLi);
     }
 });
