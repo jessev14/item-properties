@@ -66,7 +66,7 @@ Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
     itemPropertiesDiv.innerHTML = `<label>Item Properties</label>`;
     for (const [id, property] of Object.entries(itemProperties)) {
         itemPropertiesDiv.innerHTML += `
-            <label class="checkbox" data-tooltip=${property.tooltip}>
+            <label class="checkbox" data-tooltip="${property.tooltip}">
                 <input type="checkbox" name="flags.${moduleID}.itemProperties.${id}" ${flagData?.[id] ? 'checked' : ''}>
                 ${property.name}
             </label>
