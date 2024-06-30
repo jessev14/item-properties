@@ -3,6 +3,9 @@ import { ItemPropertiesConfig } from './ItemPropertiesConfig.js';
 export const moduleID = 'item-properties';
 
 
+const lg = x => console.log(x);
+
+
 Hooks.once('init', () => {
     game.settings.register(moduleID, 'itemProperties', {
         scope: 'world',
@@ -24,7 +27,7 @@ Hooks.once('init', () => {
         default: false
     });
 
-    libWrapper.register(moduleID, 'CONFIG.Item.documentClass.prototype.getChatData', newGetChatData, 'WRAPPER');
+    libWrapper.register(moduleID, 'dnd5e.dataModels.ItemDataModel.prototype.getCardData', newGetCardData, 'WRAPPER');
 });
 
 Hooks.once('ready', async () => {
@@ -38,7 +41,7 @@ Hooks.once('ready', async () => {
                 name: v,
                 tooltip: ''
             };
-        }   
+        }
     } else return game.settings.set(moduleID, 'migrationV1.2.0', true);
 
     await game.settings.set(moduleID, 'itemProperties', migratedData);
@@ -74,13 +77,13 @@ Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
     }
     detailsTab.prepend(itemPropertiesDiv);
 
-    const Ols =  html.querySelectorAll('ol.properties-list');
+    const Ols = html.querySelectorAll('ol.properties-list');
     const propertiesOl = Ols?.[1] || Ols?.[0];
     if (!propertiesOl || !flagData) return;
 
     for (const [k, v] of Object.entries(flagData)) {
         if (!v) continue;
-        
+
         const customProperty = itemProperties[k];
         const propLi = document.createElement('li');
         propLi.innerText = customProperty.name || customProperty;
@@ -88,19 +91,22 @@ Hooks.on('renderItemSheet5e', async (app, [html], appData) => {
     }
 });
 
-async function newGetChatData(wrapped, htmlOptions = {}) {
-    const data = await wrapped(htmlOptions);
 
-    const itemProperties = game.settings.get(moduleID, 'itemProperties');
-    const flagData = this.getFlag(moduleID, 'itemProperties');
-    if (flagData) {
-        for (const [k,v ] of Object.entries(flagData)) {
-            if (!v) continue;
-            
-            const customProperty = itemProperties[k];
-            data.properties.push(customProperty);
-        }
+async function newGetCardData(wrapped, enrichmentOptions = {}) {
+    const context = await wrapped(enrichmentOptions);;
+
+    lg(context);
+    lg(this)
+
+    const item = this.parent;
+    const flagData = item.getFlag(moduleID, 'itemProperties');
+    const customProperties = game.settings.get(moduleID, 'itemProperties');
+    for (const [customProp, checked] of Object.entries(flagData)) {
+        if (!checked) continue;
+
+        const propLabel = customProperties[customProp]?.name;
+        if (propLabel) context.properties.push(propLabel);
     }
 
-    return data;
+    return context;
 }
