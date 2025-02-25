@@ -73,7 +73,7 @@ export class ItemPropertiesConfig extends FormApplication {
         html.querySelector('button.save').addEventListener('click', () => this.close());
     }
 
-    _updateObject(event, formData) {
+    async _updateObject(event, formData) {
         const settingsData = {};
         const fd = Object.entries(formData);
         for (let i = 0; i < fd.length; i += 2) {
@@ -83,6 +83,7 @@ export class ItemPropertiesConfig extends FormApplication {
             }
         }
 
-        return game.settings.set(moduleID, 'itemProperties', settingsData);
+        await game.settings.set(moduleID, 'itemProperties', settingsData);
+        return SettingsConfig.reloadConfirm(true);
     }
 }
